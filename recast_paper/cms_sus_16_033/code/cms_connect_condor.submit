@@ -1,0 +1,10 @@
+Universe = vanilla
+Executable = produce.sh
+Arguments = $(slha)
+Error = log/job.err.$(Cluster)-$(Process)
+Output = log/$(slha)-job.out.$(Cluster)-$(Process)
+transfer_input_files = produce.sh
+should_transfer_files = YES
+when_to_transfer_output = ON_EXIT
+Log = log/job.log.$(Cluster)
+Queue slha from slhalist.txt
