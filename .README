@@ -1,0 +1,19 @@
+# MA5-EXO-16-012
+
+Wiki: https://madanalysis.irmp.ucl.ac.be/wiki/Korea02-CMS-EXO-16-012
+MA5: v1.6beta
+MG5: v2.6.0
+Pythia8: 8xxx
+Delphes: 3.4.1
+
+generated number of event: 100000 per each mass point
+    ref: https://docs.google.com/spreadsheets/d/1Hmgv44UCShlLZewDw0Gtu6IwZUleQaGhzZkcDvuNaXU/edit#gid=0
+
+PAS: CMS EXO-16-012
+AN: CMS, AN2015_209 (v13) (h->bb) and AN2015_203 (v11) (h->\gamma\gamma)
+MG5 Cards: https://github.com/cms-sw/genproductions/tree/master/bin/MadGraph5_aMCatNLO/cards/production/13TeV/monoHiggs/Zp2HDM
+Pythia Card: https://github.com/cms-sw/genproductions/blob/master/python/ThirteenTeV/monoHiggs/pythia8_hadronizer_nomatching_Haa_cff.py
+Pythia Tunes: https://github.com/cms-sw/cmssw/blob/CMSSW_7_2_X/Configuration/Generator/python/Pythia8CommonSettings_cfi.py
+              https://github.com/cms-sw/cmssw/blob/master/Configuration/Generator/python/Pythia8CUEP8M1Settings_cfi.py
+ 
+
