@@ -56,10 +56,10 @@ bool CMS_16_012_2gamma::Execute(SampleFormat& sample, const EventFormat& event)
 
 
 
+  MALorentzVector pTmiss = MALorentzVector();
   MALorentzVector pTmiss = event.rec()->MET().momentum();
-  cout << "11111111" << endl;
+
   double MissET = pTmiss.Pt();
-  cout << "22222222" << endl;
 //  double MET = pTmiss.Pt();
 //  double MissET = event.rec()->MET().momentum().Pt();
 
