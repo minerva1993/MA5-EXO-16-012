@@ -14,13 +14,20 @@ bool CMS_16_012_2gamma::Initialize(const MA5::Configuration& cfg, const std::map
   cout << "BEGIN Initialization" << endl;
   // initialize variables, histos
   cout << "END   Initialization" << endl;
+  AA=0;
   Manager()->AddRegionSelection("higgs_aa");
-  Manager()->AddCut("120<dip_mass<130","higgs_aa");
+  Manager()->AddCut("dip_mass_95","higgs_aa");
   Manager()->AddCut("azimuthal separation","higgs_aa");
   Manager()->AddCut("minimum azimuthal angle with jet","higgs_aa");
   Manager()->AddCut("more than two electrons","higgs_aa");
   Manager()->AddCut("more than one muon","higgs_aa");
+  Manager()->AddCut("MissET > 105","higgs_aa");
+  Manager()->AddCut("120<di__mass_130","higgs_aa");
 
+
+
+  Manager()->AddHisto("NDiphoton",3,0,1000);
+  Manager()->AddHisto("NDiphoton2",3,0,600);
   return true;
 }
 
@@ -64,9 +71,10 @@ bool CMS_16_012_2gamma::Execute(SampleFormat& sample, const EventFormat& event)
 //  MALorentzVector pTmiss = MALorentzVector();
   MALorentzVector pTmiss = event.rec()->MET().momentum();
   double MissET = pTmiss.Pt();
+  
 
 
-  cout << "2222222222222222" << endl;
+  cout << "MissET = " << MissET << endl;
 
    vector<const RecPhotonFormat*> SignalPhotons;
   for(int ii=event.rec()->photons().size()-1;ii>=0;ii--)
@@ -95,17 +103,23 @@ bool CMS_16_012_2gamma::Execute(SampleFormat& sample, const EventFormat& event)
 
 
   cout << "44444444444444444" << endl;
+ 
 
- double pt_1=0, pt_2=0;    MALorentzVector diPhoton;
+ int n_sig_ph=SignalPhotons.size();
+ Manager()->FillHisto("NDiphoton",         n_sig_ph);
+
+ double pt_1=0, pt_2=0,test=0;    MALorentzVector diPhoton;
  vector<const RecPhotonFormat*> v_signalPhotons;
   for(unsigned int i=0; i<SignalPhotons.size(); ++i){
     const RecPhotonFormat * myphoton1 = &(event.rec()->photons()[i]);
     MALorentzVector photon1;
-    photon1.SetPtEtaPhiE(myphoton1->pt(), myphoton1->eta(), myphoton1->phi(), myphoton1->e());
+//    photon1.SetPtEtaPhiE(myphoton1->pt(), myphoton1->eta(), myphoton1->phi(), myphoton1->e());
+    photon1.SetPxPyPzE(myphoton1->px(),myphoton1->py(),myphoton1->pz(),myphoton1->e());
     for(unsigned int j=0; j<event.rec()->photons().size(); ++j){
       const RecPhotonFormat * myphoton2 = &(event.rec()->photons()[j]);
       MALorentzVector photon2;
-      photon2.SetPtEtaPhiE(myphoton2->pt(), myphoton2->eta(), myphoton2->phi(), myphoton2->e());
+//      photon2.SetPtEtaPhiE(myphoton2->pt(), myphoton2->eta(), myphoton2->phi(), myphoton2->e());
+      photon2.SetPxPyPzE(myphoton2->px(),myphoton2->py(),myphoton2->pz(),myphoton2->e());
       if( (photon1 + photon2).M() > 95.0 ){
 
         if(myphoton1->pt() < myphoton2->pt()){
@@ -117,15 +131,26 @@ bool CMS_16_012_2gamma::Execute(SampleFormat& sample, const EventFormat& event)
 //        pt_2=myphoton2->pt();
 
 
-      diPhoton.SetPtEtaPhiE(v_signalPhotons[0]->pt()+v_signalPhotons[1]->pt(),
+/*      diPhoton.SetPtEtaPhiE(v_signalPhotons[0]->pt()+v_signalPhotons[1]->pt(),
       v_signalPhotons[0]->eta()+v_signalPhotons[1]->eta(),
       v_signalPhotons[0]->phi()+v_signalPhotons[1]->phi(),
-      v_signalPhotons[0]->e()+v_signalPhotons[1]->e());
+      v_signalPhotons[0]->e()+v_signalPhotons[1]->e());  */
+      
+      diPhoton.SetPxPyPzE(v_signalPhotons[0]->px()+v_signalPhotons[1]->px(),
+                          v_signalPhotons[0]->py()+v_signalPhotons[1]->py(),
+                          v_signalPhotons[0]->pz()+v_signalPhotons[1]->pz(),
+                          v_signalPhotons[0]->e()+v_signalPhotons[1]->e());
+      test=1.;
       break;
       }
     }
   }
 
+  
+
+  if( !Manager()->ApplyCut(test==1., "dip_mass_95")) return true;
+  int n_dip = v_signalPhotons.size();
+  Manager()->FillHisto("NDiphoton2",        n_dip );
   cout << "55555555555555555" << endl;
 
 
@@ -192,7 +217,7 @@ bool CMS_16_012_2gamma::Execute(SampleFormat& sample, const EventFormat& event)
   for(unsigned int ie=0; ie<event.rec()->muons().size(); ie++)
   {
     const RecLeptonFormat * CurrentMuon = &(event.rec()->muons()[ie]);
-    if(CurrentMuon->pt()>10.0) Nmu++;
+    if(CurrentMuon->pt()>30.0 && fabs(CurrentMuon->eta()) < 2.4) Nmu++;
   }
   if( !Manager()->ApplyCut( Nmu == 0, "more than one muon"))  return true;
 //  if(Nmu > 0) return true;
@@ -205,9 +230,19 @@ bool CMS_16_012_2gamma::Execute(SampleFormat& sample, const EventFormat& event)
 
 
 
-  if(MissET < 105.|| Photon_PT_Sum < 90. || (pt_1/dip_mass < 0.5) || (pt_2/dip_mass < 0.25) ) return true;
+//  if(MissET < 105.|| Photon_PT_Sum < 90. || (pt_1/dip_mass < 0.5) || (pt_2/dip_mass < 0.25) ) return true;
+/*&& Photon_PT_Sum > 90. && (pt_1/dip_mass > 0.5) && (pt_2/dip_mass > 0.25*/
 
-  if( !Manager()->ApplyCut(dip_mass>120. && dip_mass<130.,"120<dip_mass<130")) return true;
+  cout << " The second place MissET = " << MissET << endl;
+
+  if( !Manager()->ApplyCut(MissET > 105.,"MissET > 105")) return true;
+
+  AA++;
+
+  cout << " The third place MissET = " << MissET << endl;
+  cout << " AA = " << AA << endl;
+
+  if( !Manager()->ApplyCut(dip_mass>120. && dip_mass<130.,"120_dip_mass_130")) return true;
 
   return true;
 }
