@@ -14,7 +14,7 @@ bool CMS_16_012_2gamma::Initialize(const MA5::Configuration& cfg, const std::map
   cout << "BEGIN Initialization" << endl;
   // initialize variables, histos
   cout << "END   Initialization" << endl;
-  AA=0;
+  AA=0; BB=0;CC++;begin_before=0;begin_after=0;
   Manager()->AddRegionSelection("higgs_aa");
   Manager()->AddCut("dip_mass_95","higgs_aa");
   Manager()->AddCut("azimuthal separation","higgs_aa");
@@ -22,12 +22,15 @@ bool CMS_16_012_2gamma::Initialize(const MA5::Configuration& cfg, const std::map
   Manager()->AddCut("more than two electrons","higgs_aa");
   Manager()->AddCut("more than one muon","higgs_aa");
   Manager()->AddCut("MissET > 105","higgs_aa");
-  Manager()->AddCut("120<di__mass_130","higgs_aa");
+  Manager()->AddCut("120_dip_mass_130","higgs_aa");
 
 
+  Manager()->AddHisto("NDiphoton",10,0,1000);
+  Manager()->AddHisto("NDiphoton2",10,0,600);
 
-  Manager()->AddHisto("NDiphoton",3,0,1000);
-  Manager()->AddHisto("NDiphoton2",3,0,600);
+  Manager()->AddHisto("before_MissET",10,0,200);
+  Manager()->AddHisto("after_MissET",10,100,250);
+  Manager()->AddHisto("after_dip_mass",10,120,130);
   return true;
 }
 
@@ -64,8 +67,7 @@ bool CMS_16_012_2gamma::Execute(SampleFormat& sample, const EventFormat& event)
 
 
   cout << "111111111111111111" << endl;
-
-
+  
 
 
 //  MALorentzVector pTmiss = MALorentzVector();
@@ -156,6 +158,7 @@ bool CMS_16_012_2gamma::Execute(SampleFormat& sample, const EventFormat& event)
 
 
 
+
 /*  diPhoton.SetPtEtaPhiE(v_signalPhotons[0]->pt()+v_signalPhotons[1]->pt(),
       v_signalPhotons[0]->eta()+v_signalPhotons[1]->eta(),
       v_signalPhotons[0]->phi()+v_signalPhotons[1]->phi(),
@@ -188,12 +191,16 @@ bool CMS_16_012_2gamma::Execute(SampleFormat& sample, const EventFormat& event)
   cout << "77777777777777777" << endl;
 
 
-
+  begin_before++;
+  cout <<  "begin before = "<< begin_before << endl;
 
   for(unsigned int ij=0;ij<SignalJets.size();ij++){
  //   if( SignalJets[ij]->dphi_0_pi(pTmiss) < 0.5)  return true;
      if( !Manager()->ApplyCut(SignalJets[ij]->dphi_0_pi(pTmiss) > 0.5, "minimum azimuthal angle with jet")) return true;
   }
+
+  begin_after++;
+  cout <<  "begin after = "<< begin_after << endl;
 
 
   cout << "888888888888888888" << endl;
@@ -233,16 +240,18 @@ bool CMS_16_012_2gamma::Execute(SampleFormat& sample, const EventFormat& event)
 //  if(MissET < 105.|| Photon_PT_Sum < 90. || (pt_1/dip_mass < 0.5) || (pt_2/dip_mass < 0.25) ) return true;
 /*&& Photon_PT_Sum > 90. && (pt_1/dip_mass > 0.5) && (pt_2/dip_mass > 0.25*/
 
+  BB++;
   cout << " The second place MissET = " << MissET << endl;
+  Manager()->FillHisto("before_MissET",        MissET );
 
   if( !Manager()->ApplyCut(MissET > 105.,"MissET > 105")) return true;
-
   AA++;
-
+  Manager()->FillHisto("after_MissET",        MissET );
   cout << " The third place MissET = " << MissET << endl;
   cout << " AA = " << AA << endl;
-
   if( !Manager()->ApplyCut(dip_mass>120. && dip_mass<130.,"120_dip_mass_130")) return true;
+  CC++;
+  Manager()->FillHisto("after_dip_mass",        dip_mass );
 
   return true;
 }

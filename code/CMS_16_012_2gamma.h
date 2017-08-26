@@ -16,7 +16,7 @@ class CMS_16_012_2gamma : public AnalyzerBase
 
  private:
 // double Invariant_Mass(const RecPhotonFormat* jet1, const RecPhotonFormat* jet2);
- int AA;
+ int AA,BB,CC,begin_before,begin_after;
 };
 }
 
