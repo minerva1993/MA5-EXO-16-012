@@ -1,0 +1,394 @@
+\documentclass[12pt,A4paper]{article}
+%\pdfoutput=1
+
+\usepackage{multirow}
+\usepackage{cite}
+\usepackage{hyperref}
+\usepackage{slashed}
+\usepackage{graphicx}
+    \usepackage{amsmath}
+    \usepackage{caption}
+    \usepackage{subcaption}
+    \usepackage{cancel}
+    \usepackage{etoolbox} % provides \patchcmd macro
+    \makeatletter % modify the "headings" page style
+    \patchcmd{\ps@headings}{{\slshape
+ightmark}\hfil	hepage}{	hepage\hfil}{}{}
+    \makeatother
+    \pagestyle{headings}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{appendix}
+
+\textwidth 170mm
+\textheight 220mm
+\oddsidemargin -5mm
+\evensidemargin 5mm
+\topmargin -16pt
+
+\newcommand{\colspacea}{\hphantom{33333333}}
+\newcommand{\colspaceb}{\hphantom{33333333}}
+\newcommand{\colspacec}{\hphantom{33333333}}
+\newcommand{\colspace}{\hphantom{33333333333}}
+
+
+\newcommand{\xspace}{~}
+\newcommand{\GeV}{\ensuremath{\,\text{Ge\hspace{-.08em}V}}\xspace}
+\newcommand{\PSGczDo}{\ensuremath{\widetilde{\chi}^{0}_{1}}\xspace} % neutralino
+\newcommand{\Pp}{\ensuremath{p}}
+\newcommand{\PSg}{\ensuremath{\widetilde{g}}}
+\newcommand{\PQq}{\ensuremath{q}}
+\newcommand{\cPqt}{\ensuremath{t}}
+\newcommand{\cPq}{\ensuremath{q}}
+\newcommand{\cPqb}{\ensuremath{b}}
+\newcommand{\PAQq}{\overline{\ensuremath{q}}}
+\newcommand{\cPaqt}{\overline{\ensuremath{t}}}
+\newcommand{\cPaqb}{\overline{\ensuremath{b}}}
+\newcommand{\PSQ}{\ensuremath{\widetilde{q}}}
+\newcommand{\PSGcz}{\ensuremath{\widetilde{\chi_0^1}}}
+\newcommand{\qqbar}{\ensuremath{\PQq\PAQq}\xspace}
+%\newcommand{\mgluino}{\ensuremath{m_{\PSg}}\xspace}
+\newcommand{\HT}{\ensuremath{H_{\mathrm T}}\xspace}
+\newcommand{\MHT}{\ensuremath{H_{\mathrm T}^{\text{miss}}}\xspace}
+\newcommand{\njets}{\ensuremath{N_{\text{jet}}}~}
+\newcommand{\nbjets}{\ensuremath{N_{\text{b-jet}}}~}
+\newcommand{\mgluino}{\ensuremath{m_{\PSg}}\xspace}
+\newcommand{\msquark}{\ensuremath{m_{\PSQ}}\xspace}
+%\newcommand{\mlsp}{\ensuremath{m_{{\PSGcz}_1}}\xspace}
+\newcommand{\tbbar}{\ensuremath{\cPqt\cPaqb}\xspace} % t-bbar
+\newcommand{\ttbar}{\ensuremath{t\overline{t}}\xspace} % t-tbar
+\newcommand{\bbbar}{\ensuremath{b\overline{b}}\xspace} % b-bbar
+\newcommand{\sTop}{\ensuremath{\widetilde{t}}\xspace}
+\newcommand{\sBot}{\ensuremath{\widetilde{b}}\xspace}
+\newcommand{\sQua}{\ensuremath{\widetilde{q}}\xspace}
+\newcommand{\PASQt}{\ensuremath{\overline{\widetilde{t}}}\xspace} % anti stop
+\newcommand{\PASQb}{\ensuremath{\overline{\widetilde{b}}}\xspace} % anti sbottom
+\newcommand{\PASQ}{\ensuremath{\overline{\widetilde{q}}}\xspace} % anti squark
+
+
+
+
+\newcommand{\neles}{\ensuremath{N_{\text{electron}}}\xspace}
+\newcommand{\nmuons}{\ensuremath{N_{\text{muon}}}\xspace}
+\newcommand{\nisomuons}{\ensuremath{N_{\text{isolated tracks}}^{\text{(muon)}}}\xspace}
+\newcommand{\nisoeles}{\ensuremath{N_{\text{isolated tracks}}^{\text{(electron)}}}\xspace}
+\newcommand{\nisohads}{\ensuremath{N_{\text{isolated tracks}}^{\text{(hadron)}}}\xspace}
+\newcommand{\dpmht}[1]{\ensuremath{\Delta\phi_{\MHT,j_{#1}}}\xspace}
+
+
+\newcommand{\mulobs}{$\sigma^{\mathrm{UL}}_{\mathrm{obs}}$}
+\newcommand{\ulobs}{\sigma^{\mathrm{UL}}_{\mathrm{obs}}}
+\newcommand{\mulexp}{$\sigma^{\mathrm{UL}}_{\mathrm{exp}}$}
+\newcommand{\ulexp}{\sigma^{\mathrm{UL}}_{\mathrm{exp}}}
+\newcommand{\mtheo}{$\sigma^{\mathrm{pred}}_{\mathrm{theo}}$}
+\newcommand{\theo}{\sigma_{\mathrm{pred}}^{\mathrm{theo}}}
+
+\newcommand{\lumi}{\mathcal{L}}
+\newcommand{\twomm}{\hspace{2mm}}
+\newcommand{\neu}{{\widetilde{\chi}_1^0}}
+
+\newcommand{\go}{{\widetilde{g}}}
+\newcommand{\sq}{{\widetilde{q}}}
+\newcommand{\mmsq}{$m_{\widetilde{q}}$}
+\newcommand{\msq}{m_{\widetilde{q}}}
+\newcommand{\mlsp}{m_{\widetilde{\chi}}}
+\newcommand{\mmlsp}{$m_{\widetilde{\chi}}$}
+\newcommand{\mgo}{m_{\widetilde{g}}}
+\newcommand{\mmgo}{$m_{\widetilde{g}}$}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+\lstset{ %
+  language=C++,                % the language of the code
+  basicstyle=\footnotesize,           % the size of the fonts that are used for the code
+  %  numbers=left,                   % where to put the line-numbers
+  %  numberstyle=\tiny\color{gray},  % the style that is used for the line-numbers
+  %  stepnumber=2,                   % the step between two line-numbers. If it's 1, each line
+  % will be numbered
+  %  numbersep=5pt,                  % how far the line-numbers are from the code
+  backgroundcolor=\color{white},      % choose the background color. You must add \usepackage{color}
+  showspaces=false,               % show spaces adding particular underscores
+  showstringspaces=false,         % underline spaces within strings
+  showtabs=false,                 % show tabs within strings adding particular underscores
+  frame=single,                   % adds a frame around the code
+  rulecolor=\color{black},        % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. commens (green here))
+  tabsize=2,                      % sets default tabsize to 2 spaces
+  captionpos=b,                   % sets the caption-position to bottom
+  breaklines=true,                % sets automatic line breaking
+  breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
+  title=\lstname,                   % show the filename of files included with \lstinputlisting;
+  % also try caption instead of title
+  keywordstyle=\color{blue},          % keyword style
+  commentstyle=\color{dkgreen},       % comment style
+  stringstyle=\color{mauve},         % string literal style
+  escapeinside={\%*}{*)},            % if you want to add a comment within your code
+  morekeywords={*,\dots}               % if you want to add more keywords to the set
+}
+
+
+\title{Validation of the \texttt{MadAnalysis 5} implementation of CMS-SUS-16-033}
+\author{Federico Ambrogi (HEPHY Vienna) \and Jory Sonneveld (University of Hamburg)\\
+\normalsize {\it email: federico.ambrogi@cern.ch | jory.sonneveld@desy.de}
+\date{\today}
+}
+
+\begin{document}
+        \maketitle
+
+%\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%    Setup   %%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Setup}
+In this document, the \texttt{MadAnalysis 5} implementation of the all-hadronic search for SUSY particles at the
+LHC at $\sqrt{s}=13$ TeV
+\href{http://cms-results.web.cern.ch/cms-results/public-results/preliminary-results/SUS-16-033/index.html}{CMS-SUS-16-033}
+(see also \href{http://arxiv.org/abs/XXXXX.XXXX}{arXiv:XXXXX.XXXX})
+is validated%\footnote{
+%A similar search was carried out at $\sqrt{s}=7$TeV, see \href{http://arxiv.org/abs/1210.7619}{arXiv:1210.7619}.
+%The signature is discussed in the context of the NMSSM in \href{http://arxiv.org/abs/1011.6547}{arXiv:1011.6547} and \href{http://arxiv.org/abs/1101.1137}{arXiv:1101.1137}, for example.
+%}.
+.
+
+For this purpose, MC settings were provided by CMS to generate events with \texttt{MadGraph MG5\_aMC}, showered with \texttt{Pythia 8}
+
+
+Supersymmetric gluino production  $p p \to \go \go$ is assumed with $\go \to b\bar{b}A$.
+
+From the \href{https://github.com/CMS-SUS-XPAG/GenLHEfiles/}{CMS-SUS-XPAG gitbub repository} one can retrieve the cards used for \texttt{MadGraph MG5\_aMC} event generation.
+The \href{https://github.com/CMS-SUS-XPAG/GenLHEfiles/blob/master/GridpackWorkflow/production/SMS-GlGl/templatecards/SMS-GlGl_run_card.dat}{run card} used in \texttt{MadGraph MG5\_aMC} and \href{https://github.com/CMS-SUS-XPAG/GenLHEfiles/blob/master/GridpackWorkflow/production/SMS-GlGl/templatecards/SMS-GlGl_proc_card.dat}{proc card} were retrieved from there.
+From the same repository the \href{https://github.com/CMS-SUS-XPAG/GenLHEfiles/tree/master/GridpackWorkflow/production/models}{models} can be retrieved.
+\href{https://github.com/CMS-SUS-XPAG/GenLHEfiles/tree/593104be96b2963984328bf855ee19f39bcce5ed/GridpackWorkflow/production/models}{The models directory in github}.
+
+This is needed for, for example, the fragmentation done with \texttt{Pythia 8}.
+For example, for \href{https://github.com/CMS-SUS-XPAG/GenLHEfiles/blob/593104be96b2963984328bf855ee19f39bcce5ed/GridpackWorkflow/production/models/T1bbbb/T1bbbb_fragment.py}{\texttt{T1bbbb} this was used}.
+The pythia settings are then retrieved from the \href{}{CMS software github repository}:
+\begin{itemize}
+    \item \href{https://github.com/cms-sw/cmssw/blob/CMSSW_8_1_X/Configuration/Generator/python/Pythia8CUEP8M1Settings_cfi.py}{Pythia8CUEP8M1Settings} and
+    \item \href{https://github.com/cms-sw/cmssw/blob/CMSSW_8_1_X/Configuration/Generator/python/Pythia8CommonSettings_cfi.py}{Pythia8CommonSettings}. Also:
+    \item \href{https://github.com/CMS-SUS-XPAG/GenLHEfiles/blob/593104be96b2963984328bf855ee19f39bcce5ed/Run2Mechanism/genstep/genfragment.py}{The genfragment file is used.}
+\end{itemize}
+
+
+Models studied are shown in \autoref{fig:t1tttt,fig:t5qqqqqvv,fig:t2tt}.
+\begin{figure}[]
+    \centering
+    \includegraphics[width=0.3\textwidth]{img/CMS-PAS-SUS-16-014_Figure_001-a.png}
+    \caption{The \texttt{T1tttt} model. Versions with bottom and light quarks in the final state were also studied.}
+    \label{fig:t1tttt}
+\end{figure}
+\begin{figure}[]
+    \centering
+    \includegraphics[width=0.3\textwidth]{img/CMS-PAS-SUS-16-014_Figure_001-b.png}
+    \caption{The \texttt{T5qqqqVV} model.}
+    \label{fig:t5qqqqvv}
+\end{figure}
+\begin{figure}[]
+    \centering
+    \includegraphics[width=0.3\textwidth]{img/CMS-PAS-SUS-16-014_Figure_001-c.png}
+    \caption{The \texttt{T2tt} model.}
+    \label{fig:t2tt}
+\end{figure}
+
+
+
+The search, which originally has more than 172 bins, is also divided into aggregate search regions, as shown together with the search results in \autoref{tab:pre-fit-results-asr}.
+\input{SUS-16-033_observed_aggregate.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+The \texttt{Pythia 6.4} settings were read from an external card and are given in \autoref{appendix:pythia}.
+
+
+In \texttt{MadAnalysis 5}, to run \texttt{DelphesMA5tune} the CMS settings 
+with an altered version of this \href{http://madanalysis.irmp.ucl.ac.be/attachment/wiki/PhysicsAnalysisDatabase/delphesMA5tune_card_CMS_SUSY.tcl}{\texttt{DelphesMA5tune} card}, which can be found on the \texttt{MadAnalysis} \href{http://madanalysis.irmp.ucl.ac.be/attachment/wiki/PhysicsAnalysisDatabase/}{Physics Analysis Database} page, were used.
+The parameter changed in the \texttt{DelphesMA5tune} card was the b-tag parameter to obtain a b-tag efficiency of 70\%, as shown in \autoref{appendix:delphesma5}.
+Cut flows and histograms of several observables are compared with those of CMS in the next sections.
+%In the last section, exclusions for the $A$ mass are compared.
+
+
+\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%   Cut flow  %%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Cut flow}
+This analysis is a multijet, missing transverse momentum and zero lepton analysis. The cut flows for the simplified model working points are given in \autoref{tab:sel-eff-gg}, \autoref{tab:sel-eff-qq}, and \autoref{tab:sel-eff-gg-supplementary}.
+\input{SUS-16-033_cutflow.tex}
+    \clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%   Distributions of Observables  %%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Distributions of observables}
+In \autoref{fig:fastsim-Nminus1-gg-uncompressed} some kinematic distributions are shown.
+
+\input{SUS-16-033_observed_distributions.tex}
+
+\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%% Appendices %%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\appendix
+\appendixpage
+\addappheadtotoc
+
+%\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%% Pythia 6.4 %%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\section{\texttt{Pythia 6.4} settings}
+\label{appendix:pythia}
+The following settings in \texttt{Pythia 6.4} as used in \texttt{MadGraph 1.5.12} were read from an external card:
+\lstset{language=fortran}
+\begin{lstlisting}
+!... pythia_card.dat
+!...Parton showering on or off
+      MSTP(61)=1
+      MSTP(71)=1
+
+!...Fragmentation/hadronization on or off
+      MSTJ(1)=1
+
+!...Multiple interactions on or off
+      MSTP(81)=1
+
+!...Don't stop execution after 10 errors
+      MSTU(21)=1
+
+!...Set pdf to cteq6l1:
+      MSTP(51)=10042 ! structure function chosen (external PDF CTEQ6L1)
+      MSTP(52)=2 ! work with LHAPDF
+      LHAPATH=/path/to/lhapdf/PDFSets
+
+!...More settings:
+      MSTJ(22)=2 ! Decay those unstable particles
+      PARJ(71)=10 . ! for which ctau 10 mm
+      MSTP(33)=0 ! no K factors in hard cross sections
+      MSTP(2)=1 ! which order running alphaS
+      PARP(82)=1.921 ! pt cutoff for multiparton interactions
+      PARP(89)=1800. ! sqrts for which PARP82 is set
+      PARP(90)=0.227 ! Multiple interactions: rescaling power
+      MSTP(96)=6 ! CR (color reconnection parameters)
+      PARP(77)=1.016 ! CR
+      PARP(78)=0.538 ! CR
+      PARP(80)=0.1 ! Prob. colored parton from BBR
+      PARP(83)=0.356 ! Multiple interactions: matter distribution parameter
+      PARP(84)=0.651 ! Multiple interactions: matter distribution parameter
+      PARP(62)=1.025 ! ISR cutoff
+      MSTP(91)=1 ! Gaussian primordial kT
+      PARP(93)=10.0 ! primordial kT-max
+      MSTP(81)=21 ! multiple parton interactions 1 is Pythia default
+      MSTP(82)=4 ! Defines the multi-parton model
+\end{lstlisting}
+In the pythia program \texttt{pythia.f}, the following settings were used:
+\begin{lstlisting}
+!... pythia.f
+C... Model, process
+        CALL PYGIVE('MSEL=0')
+        CALL PYGIVE('MSUB(186)=1') ! gg->QQbarA (MSSM)
+        CALL PYGIVE('KFPR(186,2)= 5') ! Q = b
+
+C... Model params
+            IMSS(4)= 2.     ! masses fixed by user',
+            RMSS(5)= 30.   ! tan beta',
+            RMSS(19)= 30. ! m_A',
+            RMSS(1)= 100.  ! M1',
+            RMSS(2)= 200.  ! M2',
+            RMSS(3)= 800.  ! Mg',
+            RMSS(4)= 200.  ! mu',
+            RMSS(6)= 1000.  ! MS',
+            RMSS(7)= 1000.  ! MS',
+            RMSS(8)= 1000.  ! MS',
+            RMSS(9)= 1000.  ! MS',
+            RMSS(10)= 1000.  ! MS',
+            RMSS(11)= 1000.  ! MS',
+            RMSS(12)= 1000.  ! MS',
+            RMSS(13)= 1000.  ! MS',
+            RMSS(14)= 1000.  ! MS',
+            RMSS(15)= 2000.  ! Ab',
+            RMSS(16)= 2000.  ! At',
+            RMSS(17)= 2000.  ! Atau',
+            CALL PYGIVE('PMAS(36,1)=30.')  ! mA
+C... Switch on decay of A -> mu+mu-:
+            CALL PYGIVE('MDME(429,1)=1')  ! decay to mu+mu-',
+C... Switch off all other decays:
+            CALL PYGIVE('MDME(420,1)=0')  ! Higgs(H) decay into ddbar',
+            CALL PYGIVE('MDME(421,1)=0')
+            CALL PYGIVE('MDME(422,1)=0')
+            CALL PYGIVE('MDME(423,1)=0')
+            CALL PYGIVE('MDME(424,1)=0')
+            CALL PYGIVE('MDME(425,1)=0')
+            CALL PYGIVE('MDME(426,1)=0')
+            CALL PYGIVE('MDME(427,1)=0')
+            CALL PYGIVE('MDME(428,1)=0')
+C... and these as well:
+            CALL PYGIVE('MDME(430,1)=0')
+            CALL PYGIVE('MDME(431,1)=0')
+            ...
+            CALL PYGIVE('MDME(502,1)=0')
+\end{lstlisting}
+The dots indicate the missing incrementing numbers from 432 up to and including 501.
+
+\clearpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%  DelphesMA5tune  %%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\texttt{delphesMA5tune} settings}
+\label{appendix:delphesma5}
+In \texttt{MadAnalysis 5}, to run \texttt{DelphesMA5tune} the following settings were used:
+\lstset{language=sh}
+\begin{lstlisting}
+ma5>set main.fastsim.package = delphesMA5tune
+\end{lstlisting}
+and
+\begin{lstlisting}
+ma5>set main.fastsim.detector = cms
+\end{lstlisting}
+The \href{http://madanalysis.irmp.ucl.ac.be/attachment/wiki/PhysicsAnalysisDatabase/delphesMA5tune_card_CMS_SUSY.tcl}{\texttt{DelphesMA5tune} card} used for this analysis can be found on the \texttt{MadAnalysis} \href{http://madanalysis.irmp.ucl.ac.be/attachment/wiki/PhysicsAnalysisDatabase/}{Physics Analysis Database} page.
+It was adjusted to have an appropriate $b$-tag efficiency:
+\lstset{language=sh}
+\begin{lstlisting}
+###########
+# b-tagging
+###########
+
+module BTagging BTagging {
+  set PartonInputArray Delphes/partons
+  set JetInputArray JetEnergyScale/jets
+
+  set BitNumber 0
+
+  set DeltaR 0.5
+
+  set PartonPTMin 1.0
+
+  set PartonEtaMax 2.5
+
+  # default efficiency formula (misidentification rate)
+  add EfficiencyFormula {0} {0.01}
+
+  # efficiency formula for c-jets (misidentification rate)
+  add EfficiencyFormula {4} {0.20}
+
+  # working point 60%
+  # obtained from CMS-SUS-13-013, Section 9
+  # efficiency formula for b-jets
+  add EfficiencyFormula {5} {
+                             (pt < 120.) * ((1.55e-6)*pt^3 + (-4.26e-4)*pt^2 + (0.0391)*pt + (-0.496)) + \
+                             (pt >= 120.) * ((-3.26e-4)*pt + 0.7681)
+                            }
+
+}
+\end{lstlisting}
+%  # efficiency formula for b-jets 70%
+%  add EfficiencyFormula {5} { 0.70 }
+
+
+
+\end{document}
