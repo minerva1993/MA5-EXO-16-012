@@ -1,6 +1,10 @@
 #ifndef analysis_tutorial2_h
 #define analysis_tutorial2_h
 
+#include <TFile.h>
+#include <TH1.h>
+#include <TCanvas.h>
+
 #include "SampleAnalyzer/Process/Analyzer/AnalyzerBase.h"
 
 namespace MA5
@@ -18,6 +22,10 @@ class tutorial2 : public AnalyzerBase
   int nPhoton;
   int nSignal;
   int nEvent;
+
+  TCanvas *c;
+  TH1F * diPhotonMass;
+  TH1F * missingET;
 };
 }
 
