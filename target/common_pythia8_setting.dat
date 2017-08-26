@@ -1,23 +1,19 @@
 !CUEP8M1 Tune
-!SLHA:minMassSM=1000.
-!SLHA:keepSM=on
-!SLHA:useDecayTable = off
-!Main:timesAllowErrors=10000
-!MultipartonInteractions:expPow=1.6
-!MultipartonInteractions:ecmPow=2.5208
-!MultipartonInteractions:pT0Ref=2.4024
-!ParticleDecays:limitTau0=on
-!ParticleDecays:allowPhotonRadiation=on
-!ParticleDecays:tau0Max=10
-!SoftQCD:nonDiffractive=on
-!SoftQCD:doubleDiffractive=on
-!SoftQCD:singleDiffractive=on
-!Check:epTolErr=1.0000000000e-02
+SLHA:minMassSM=1000.
+SLHA:keepSM=on
+SLHA:useDecayTable = off
+Main:timesAllowErrors=10000
+MultipartonInteractions:expPow=1.6
+MultipartonInteractions:ecmPow=2.5208
+MultipartonInteractions:pT0Ref=2.4024
+ParticleDecays:limitTau0=on
+ParticleDecays:allowPhotonRadiation=on
+ParticleDecays:tau0Max=10
+Check:epTolErr=1.0000000000e-02
 !Tune:preferLHAPDF = 2 !This is included later version of CMSSW7_x_x, so not used in this analsis
 !Beams:setProductionScalesFromLHEF = off !This is included later version of CMSSW7_x_x, so not used in this analsis AND it is off in default setting
-!Tune:ee=7
-!Tune:pp=14
-!Currently tune is turned off because it has some problem
+Tune:ee=7
+Tune:pp=14
 
 !This is for decay mode
 25:m0 = 125.0

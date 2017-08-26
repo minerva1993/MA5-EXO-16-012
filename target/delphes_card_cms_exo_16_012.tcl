@@ -283,6 +283,7 @@ module SimpleCalorimeter ECal {
   add EnergyFraction {13} {0.0}
   add EnergyFraction {14} {0.0}
   add EnergyFraction {16} {0.0}
+  add EnergyFraction {18} {0.0}
   add EnergyFraction {1000022} {0.0}
   add EnergyFraction {1000023} {0.0}
   add EnergyFraction {1000025} {0.0}
@@ -368,6 +369,7 @@ module SimpleCalorimeter HCal {
   add EnergyFraction {13} {0.0}
   add EnergyFraction {14} {0.0}
   add EnergyFraction {16} {0.0}
+  add EnergyFraction {18} {0.0}
   add EnergyFraction {1000022} {0.0}
   add EnergyFraction {1000023} {0.0}
   add EnergyFraction {1000025} {0.0}
