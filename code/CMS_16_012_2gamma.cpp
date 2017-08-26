@@ -1,4 +1,7 @@
 #include "SampleAnalyzer/User/Analyzer/CMS_16_012_2gamma.h"
+#include <iostream>
+#include <TCanvas.h>
+#include <vector>
 using namespace MA5;
 using namespace std;
 
@@ -13,6 +16,11 @@ bool CMS_16_012_2gamma::Initialize(const MA5::Configuration& cfg, const std::map
   cout << "END   Initialization" << endl;
   Manager()->AddRegionSelection("higgs_aa");
   Manager()->AddCut("120<dip_mass<130","higgs_aa");
+  Manager()->AddCut("azimuthal separation","higgs_aa");
+  Manager()->AddCut("minimum azimuthal angle with jet","higgs_aa");
+  Manager()->AddCut("more than two electrons","higgs_aa");
+  Manager()->AddCut("more than one muon","higgs_aa");
+
   return true;
 }
 
@@ -41,30 +49,24 @@ bool CMS_16_012_2gamma::Execute(SampleFormat& sample, const EventFormat& event)
     WARNING << "Found one event with a zero weight. Skipping..." << endmsg;
     return false;
   }
-
-  if (event.rec()==0) {return true;}
-       EventFormat myEvent;
-       myEvent = event;
   Manager()->InitializeForNewEvent(myEventWeight);
-  if (event.rec()!=0)
+
+  //the loop start
+  if (event.rec()==0) { return true;}
+  //Defining the containers
+
+
+  cout << "111111111111111111" << endl;
 
 
 
 
-
-
-
-
-
-  MALorentzVector pTmiss = MALorentzVector();
+//  MALorentzVector pTmiss = MALorentzVector();
   MALorentzVector pTmiss = event.rec()->MET().momentum();
-
   double MissET = pTmiss.Pt();
-//  double MET = pTmiss.Pt();
-//  double MissET = event.rec()->MET().momentum().Pt();
 
 
-
+  cout << "2222222222222222" << endl;
 
    vector<const RecPhotonFormat*> SignalPhotons;
   for(int ii=event.rec()->photons().size()-1;ii>=0;ii--)
@@ -82,6 +84,7 @@ bool CMS_16_012_2gamma::Execute(SampleFormat& sample, const EventFormat& event)
     }
   }
 
+  cout << "33333333333333333" << endl;
 
    for(int ii=SignalPhotons.size()-1;ii>=0;ii--){
       const RecPhotonFormat * myPhoton = SignalPhotons[ii];
@@ -91,7 +94,9 @@ bool CMS_16_012_2gamma::Execute(SampleFormat& sample, const EventFormat& event)
    }
 
 
+  cout << "44444444444444444" << endl;
 
+ double pt_1=0, pt_2=0;    MALorentzVector diPhoton;
  vector<const RecPhotonFormat*> v_signalPhotons;
   for(unsigned int i=0; i<SignalPhotons.size(); ++i){
     const RecPhotonFormat * myphoton1 = &(event.rec()->photons()[i]);
@@ -102,28 +107,45 @@ bool CMS_16_012_2gamma::Execute(SampleFormat& sample, const EventFormat& event)
       MALorentzVector photon2;
       photon2.SetPtEtaPhiE(myphoton2->pt(), myphoton2->eta(), myphoton2->phi(), myphoton2->e());
       if( (photon1 + photon2).M() > 95.0 ){
+
+        if(myphoton1->pt() < myphoton2->pt()){
+          myphoton1=myphoton2;
+        }
         v_signalPhotons.push_back(myphoton1);
 	    v_signalPhotons.push_back(myphoton2);
+//        pt_1=myphoton1->pt();
+//        pt_2=myphoton2->pt();
+
+
+      diPhoton.SetPtEtaPhiE(v_signalPhotons[0]->pt()+v_signalPhotons[1]->pt(),
+      v_signalPhotons[0]->eta()+v_signalPhotons[1]->eta(),
+      v_signalPhotons[0]->phi()+v_signalPhotons[1]->phi(),
+      v_signalPhotons[0]->e()+v_signalPhotons[1]->e());
+      break;
       }
     }
   }
 
+  cout << "55555555555555555" << endl;
 
 
 
-  double pt_1=v_signalPhotons[0]->pt(),pt_2=v_signalPhotons[1]->pt();
 
-  MALorentzVector diPhoton;
-  diPhoton.SetPtEtaPhiE(v_signalPhotons[0]->pt()+v_signalPhotons[1]->pt(),
+/*  diPhoton.SetPtEtaPhiE(v_signalPhotons[0]->pt()+v_signalPhotons[1]->pt(),
       v_signalPhotons[0]->eta()+v_signalPhotons[1]->eta(),
       v_signalPhotons[0]->phi()+v_signalPhotons[1]->phi(),
       v_signalPhotons[0]->e()+v_signalPhotons[1]->e());
-
+*/
 
    double Photon_PT_Sum=diPhoton.Pt(); double dip_mass=diPhoton.M(); 
-   if( diPhoton.DeltaPhi(pTmiss) < 2.1)  return true;
+  cout << "666666666666666666" << endl;
+
+  if( !Manager()->ApplyCut(fabs(diPhoton.DeltaPhi(pTmiss)) > 2.1, "azimuthal separation")) return true;
+//   if( fabs(diPhoton.DeltaPhi(pTmiss)) < 2.1)  return true;
 
 
+
+  cout << "666666666666666666" << endl;
 
 
 
@@ -138,26 +160,33 @@ bool CMS_16_012_2gamma::Execute(SampleFormat& sample, const EventFormat& event)
 
 
 
+  cout << "77777777777777777" << endl;
+
 
 
 
   for(unsigned int ij=0;ij<SignalJets.size();ij++){
-    if( SignalJets[ij]->dphi_0_pi(pTmiss) < 0.5)  return true;
+ //   if( SignalJets[ij]->dphi_0_pi(pTmiss) < 0.5)  return true;
+     if( !Manager()->ApplyCut(SignalJets[ij]->dphi_0_pi(pTmiss) > 0.5, "minimum azimuthal angle with jet")) return true;
   }
 
 
+  cout << "888888888888888888" << endl;
 
 
 
-
-  int NB=0, Nmu=0;
+  int NE=0, Nmu=0;
   for(unsigned int ie=0; ie<event.rec()->electrons().size(); ie++)
   {
     const RecLeptonFormat * CurrentElectron = &(event.rec()->electrons()[ie]);
-    if(CurrentElectron->pt()>10.0) NB++;
+    if(CurrentElectron->pt()>10.0) NE++;
   }
-  if(NB>=2) return true;
+  if( !Manager()->ApplyCut( NE<=2, "more than two electrons")) return true;
 
+
+
+
+  cout << "999999999999999999999" << endl;
 
 
   for(unsigned int ie=0; ie<event.rec()->muons().size(); ie++)
@@ -165,7 +194,8 @@ bool CMS_16_012_2gamma::Execute(SampleFormat& sample, const EventFormat& event)
     const RecLeptonFormat * CurrentMuon = &(event.rec()->muons()[ie]);
     if(CurrentMuon->pt()>10.0) Nmu++;
   }
-  if(Nmu > 0) return true;
+  if( !Manager()->ApplyCut( Nmu == 0, "more than one muon"))  return true;
+//  if(Nmu > 0) return true;
 
 
 
@@ -179,30 +209,8 @@ bool CMS_16_012_2gamma::Execute(SampleFormat& sample, const EventFormat& event)
 
   if( !Manager()->ApplyCut(dip_mass>120. && dip_mass<130.,"120<dip_mass<130")) return true;
 
-  
-
-
-
-
-
-
-
-
-//  double mydphi = SignalJets[i]->dphi_0_pi(pTmiss);
-
-
   return true;
 }
 
-/*
- double CMS_16_012_2gamma::Invariant_Mass(const RecPhotonFormat* jet1, const RecPhotonFormat* jet2) {
-      double M1=jet1->momentum().M(), M2=jet2->momentum().M();
-      double Et_1=sqrt(pow(jet1->pt(),2)+pow(M1,2));double Et_2=sqrt(pow(jet2->pt(),2)+pow(M2,2));
-      double y_jet1=log((sqrt(pow(M1,2)+pow(jet1->pt() *cosh(jet1->eta()),2))+jet1->pt()*sinh(jet1->eta()))/sqrt(pow(M1,2)+pow(jet1->pt(),2)));
-      double y_jet2=log((sqrt(pow(M2,2)+pow(jet2->pt() *cosh(jet2->eta()),2))+jet2->pt()*sinh(jet2->eta()))/sqrt(pow(M2,2)+pow(jet2->pt(),2)));
-      double dR_y=sqrt(pow(y_jet1-y_jet2,2)+pow(jet1->dphi_0_pi(jet2),2));
-      double Inv_mass = sqrt(pow(M1,2)+pow(M2,2)+2*(Et_1*Et_2*cosh(dR_y)-(jet1->pt()*jet2->pt())) );
-      return Inv_mass;
- }
 
-*/
+
