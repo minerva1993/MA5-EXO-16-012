@@ -164,9 +164,9 @@ bool MyAnalysis::Execute(SampleFormat& sample, const EventFormat& event){
   MALorentzVector diPhoton = {0.0,0.0,0.0,0.0};
   if( v_signalPhotons.size() >= 2){
     diPhoton.SetPxPyPzE(v_signalPhotons[0]->px()+v_signalPhotons[1]->px(),
-  v_signalPhotons[0]->py()+v_signalPhotons[1]->py(),
-  v_signalPhotons[0]->pz()+v_signalPhotons[1]->pz(),
-  v_signalPhotons[0]->e()+v_signalPhotons[1]->e());
+                        v_signalPhotons[0]->py()+v_signalPhotons[1]->py(),
+                        v_signalPhotons[0]->pz()+v_signalPhotons[1]->pz(),
+                        v_signalPhotons[0]->e()+v_signalPhotons[1]->e());
   }
   else return true;
 
@@ -179,7 +179,9 @@ bool MyAnalysis::Execute(SampleFormat& sample, const EventFormat& event){
     std::sort(v_signalJets.begin(),v_signalJets.end());
     for(vector<const RecJetFormat *>::iterator v_itr = v_signalJets.begin(); v_itr != v_signalJets.end(); ++v_itr){
       const RecJetFormat * myjet = *v_itr;
-      if( myjet->pt() > 50 && myjet->dphi_0_pi(pTmiss) < 0.5 ) return true;
+      //if( myjet->pt() < 30 ) return true;
+      //if( myjet->eta() > 4.7 ) return true;
+      if( myjet->pt() > 50 && myjet->dphi_0_pi(pTmiss) < 0.5) return true;
     }
   }
   
@@ -188,7 +190,7 @@ bool MyAnalysis::Execute(SampleFormat& sample, const EventFormat& event){
   //if( !Manager()->ApplyCut((v_signalPhotons[0]->pt()/diPhoton.M()) > 0.5 && (v_signalPhotons[1]->pt()/diPhoton.M()) > 0.25, "photon1.pT/diphoton.m > 0.5 && photon2.pT/diphoton.m > 0.25")) return true;
   
   /* 8. Diphoton.pT > 90 GeV, MET > 105 GeV */
-  if( diPhoton.Pt() < 90.0 /*|| MET < 105.0*/ ) return true;
+  if( diPhoton.Pt() < 90.0 || MET < 105.0 ) return true;//comment out MET part when you draw met plot!!
   //if( !Manager()->ApplyCut(diPhoton.Pt() > 90.0 && MET > 105.0, "diphoton.pT > 90 GeV && MET > 105 GeV")) return true;
 
   diPhotonMass->Fill(diPhoton.M());  
