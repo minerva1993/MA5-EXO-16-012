@@ -1,5 +1,5 @@
-#ifndef analysis_tutorial2_h
-#define analysis_tutorial2_h
+#ifndef analysis_MyAnalysis_h
+#define analysis_MyAnalysis_h
 
 #include <TFile.h>
 #include <TH1.h>
@@ -9,9 +9,9 @@
 
 namespace MA5
 {
-class tutorial2 : public AnalyzerBase
+class MyAnalysis : public AnalyzerBase
 {
-  INIT_ANALYSIS(tutorial2,"tutorial2")
+  INIT_ANALYSIS(MyAnalysis,"MyAnalysis")
 
  public:
   virtual bool Initialize(const MA5::Configuration& cfg, const std::map<std::string,std::string>& parameters);
