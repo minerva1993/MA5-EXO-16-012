@@ -94,7 +94,9 @@ bool MyAnalysis::Execute(SampleFormat& sample, const EventFormat& event){
 
   for(unsigned int i=0; i<event.rec()->jets().size(); ++i){
     const RecJetFormat * jet = &(event.rec()->jets()[i]);
-    v_signalJets.push_back(jet);
+    if( jet->momentum().Pt() > 30 ){
+      v_signalJets.push_back(jet);
+    }
   }
 
   //Diphoton selection
