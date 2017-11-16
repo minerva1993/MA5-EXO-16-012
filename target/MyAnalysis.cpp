@@ -142,13 +142,13 @@ bool MyAnalysis::Execute(SampleFormat& sample, const EventFormat& event){
     
     //barrelcap
     if( photon->eta() < 1.44 ) {
-      if(chargePt > 3.32 || neutralPt > (1.920+0.14*myPhotonPt+0.000019*myPhotonPt*myPhotonPt) || photonplt > (0.81+0.0053*myPhotonPt) || photonID > 0.05 ){
+      if(chargePt > 3.32 || neutralPt > (1.920+0.14*myPhotonPt+0.000019*myPhotonPt*myPhotonPt) || photonplt > (0.81+0.0053*myPhotonPt) || photonID > 0.1 ){
         v_signalPhotons.erase(v_signalPhotons.begin()+i);
       }
     }
     //endcap
     else if( photon->eta() > 1.566 && photon->eta() < 2.4 ){
-      if(chargePt > 1.97 || neutralPt > (11.86+0.0139*myPhotonPt+0.000025*myPhotonPt*myPhotonPt) || photonplt > (0.83+0.0034*myPhotonPt) || photonID > 0.05 ){
+      if(chargePt > 1.97 || neutralPt > (11.86+0.0139*myPhotonPt+0.000025*myPhotonPt*myPhotonPt) || photonplt > (0.83+0.0034*myPhotonPt) || photonID > 0.1 ){
         v_signalPhotons.erase(v_signalPhotons.begin()+i);
       }
     }
