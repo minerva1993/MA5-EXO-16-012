@@ -124,14 +124,20 @@ ightmark}\hfil	hepage}{	hepage\hfil}{}{}
   morekeywords={*,\dots}               % if you want to add more keywords to the set
 }
 
+\usepackage{authblk}
 
 \title{Validation of the \texttt{MadAnalysis 5} implementation of CMS-EXO-16-012}
-\author{Jiwon Park\footnote{jiwon.park@cern.ch} , Seohyun Ahn\footnote{klar.wind0425@gmail.com} (Hanyang University) \and Wenxing Zhang\footnote{zhangwenxing@itp.ac.cn} (ITP of Chinese Academy of Science)\\ 
+\author[1]{Jiwon Park\footnote{jiwon.park@cern.ch}}
+\author[1]{Seohyun Ahn\footnote{klar.wind0425@gmail.com}}
+\author[2]{Wenxing Zhang\footnote{zhangwenxing@itp.ac.cn}}
+\affil[1]{\footnotesize Department of Physics, Hanyang University, 222 Wangsimni-ro, Seoul, Republic of Korea}
+\affil[2]{\footnotesize CAS Key Laboratory of Theoretical Physics, Institute of Theoretical Physics, Chinese Academy of Sciences, Beijing 100190, P. R. China}
+
 \date{\today}
-}
 
 \begin{document}
-        \maketitle
+
+\maketitle
 
 %\clearpage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -151,10 +157,10 @@ ightmark}\hfil	hepage}{	hepage\hfil}{}{}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Description of the implementation}
 \subsection{Objects definition}
-There are several selections for photon identification. Cut based photon identification with loose working point is applied. The selections are presented in the photon id paper from CMS, as well as PAS EXO-16-012\cite{ref:photonid, ref:paper}. Isolation is computed in a area with angular separation $\Delta R = 0.3$ ($\Delta R = \sqrt{(\Delta\eta)^2+(\Delta\phi)^2}$). 
+There are several selections for photon identification. Cut based photon identification with loose working point is applied. The selections are presented in the photon identification paper from CMS, as well as PAS EXO-16-012\cite{ref:photonid, ref:paper}. Isolation is computed in a area with angular separation $\Delta R = 0.3$ ($\Delta R = \sqrt{(\Delta\eta)^2+(\Delta\phi)^2}$, where $\Delta\eta$ and $\Delta\phi$ are angle differences of the particles relative to the beam axis and measured in a plane orthogonal to beam line, respectively). 
 
 First, the events with diphoton mass cut where $m_{\gamma\gamma} > 95$ GeV and asymmetric $p_T$ threshold (30 and 18 GeV) are selected. 
-Next, to reject fake photons, cuts on energy deposit in Hadronic Calorimeter(HCAL) over energy deposit in Electromagnetic Calorimeter(ECAL), which denoted as H/E, is required to be less than 0.1. Isolation cuts for charged hadron (Iso$_{ch}$), neutral hadron (Iso$_{Neu}$), and photon (Iso$_{\gamma}$) is also applied. For neutral particles, isolations are computed with $\rho$ correction to take into account the dependence of the pileup transverse energy density on pseudorapidity, where $\rho$ is the median of the transverse energy density per unit area.
+Next, to reject fake photons, cuts on energy deposit in Hadronic Calorimeter(HCAL) over energy deposit in Electromagnetic Calorimeter(ECAL), which denoted as H/E, is required to be less than 0.1. Isolation cuts for charged hadron (Iso$_{ch}$), neutral hadron (Iso$_{Neu}$), and photon (Iso$_{\gamma}$) is also applied. In CMS PAS, isolations for neutral particles are computed with $\rho$ correction to take into account the dependence of the pileup transverse energy density on pseudorapidity, where $\rho$ is the median of the transverse energy density per unit area. But in this validation isolations are computed without correction due to lack of information.
 
 \begin{center}
 \begin{table}[h!]
@@ -164,9 +170,9 @@ Next, to reject fake photons, cuts on energy deposit in Hadronic Calorimeter(HCA
 	\hline
 	H/E& \multicolumn{2}{c}{ $< $0.1}\\
 	Iso$_{ch}$ [GeV]& $<$ 3.32& $<$ 1.97\\
-	$\rho$ corrected Iso$_{Neu}$ [ GeV ]& $< 1.92 + 0.14 p_T + 0.000019(p_T)^2$& $< 11.86 + 0.0139 p_T + 0.000025(p_T)^2$\\
+	Iso$_{Neu}$ [GeV]& $< 1.92 + 0.14 p_T + 0.000019(p_T)^2$& $< 11.86 + 0.0139 p_T + 0.000025(p_T)^2$\\
 
-	$\rho$ corrected Iso$_{\gamma}$ [ GeV ]& $< 0.81 + 0.0053 p_T$& $< 0.83 + 0.0034 p_T$\\
+	Iso$_{\gamma}$ [GeV]& $< 0.81 + 0.0053 p_T$& $< 0.83 + 0.0034 p_T$\\
 	\hline
 	\end{tabular}
 	\caption{Value of each variable used in barrel and endcap photon identification} \vspace*{-20pt}
@@ -174,32 +180,31 @@ Next, to reject fake photons, cuts on energy deposit in Hadronic Calorimeter(HCA
 \end{center}
 
 \subsection{Signal selections}
-After these selections, we applied additional cuts to maximize the expected significance for each $Z'$ mass point. The chosen kinematic selections include $p_{T_1}/m_{\gamma\gamma} > 0.5$ and $p_{T_2}/m_{\gamma\gamma} > 0.25$, for leading photon $\gamma_1$ and subleading photon $\gamma_2$. Moreover we imposed a diphoton transverse momentum and missing transverse momentum cut, $p_{T_{\gamma\gamma}} > 90$ GeV and $p_T^{miss} > 105$ MeV.
+After these selections, we applied additional cuts to maximize the expected significance for each $Z'$ mass point. The chosen kinematic selections include $p_{T_1}/m_{\gamma\gamma} > 0.5$ and $p_{T_2}/m_{\gamma\gamma} > 0.25$, for leading photon $\gamma_1$ and subleading photon $\gamma_2$. Moreover we imposed a diphoton transverse momentum and missing transverse momentum cut, $p_{T_{\gamma\gamma}} > 90$ GeV and $p_T^{miss} > 105$ GeV.
 
-In addition, two more cuts are applied to enhance the signal over background discrimination and to veto events with mismeasured $p_T^{miss}$ (transverse momentum component of $E^{miss}_T$).
+In addition, two more cuts on angle difference are applied to enhance the signal over background discrimination and to veto events with mismeasured $p_T^{miss}$ (transverse momentum component of $E^{miss}_T$).
 \begin{itemize}
 	\item $|\Delta\phi(\gamma\gamma,\,p_T^{miss})| > 2.1$
 	\item $min(|\Delta\phi(jet,\,\vec p_T^{miss})|) > 0.5$ for all jets in the event with $p_T > 50$ GeV where jets are reconstructed with the clustering of PF candidates by means of the anti-kt algorithm with a distance parameter of 0.4.
 \end{itemize}
 
-Finally we defined a signal region (SR), where $120 < m_{\gamma\gamma} < 130$ GeV and $p_T^{miss} > 105$ MeV.
+Finally we defined a signal region (SR), where $120 < m_{\gamma\gamma} < 130$ GeV and $p_T^{miss} > 105$ GeV.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Validation}
 \subsection{Event Generation}
-To generate a signal sample, \href{http://rkhurana.web.cern.ch/rkhurana/monoH/models/}{model UFO file} is provided by CMS. From the \href{https://github.com/cms-sw/genproductions/tree/master/bin/MadGraph5_aMCatNLO/cards/production/13TeV/monoHiggs/Zp2HDM/Zprime_A0h_A0chichi}{CMS genproduction github repository}\cite{ref:gitgen} one can retrieve the cards used for \texttt{MadGraph MG5\_aMC}\cite{ref:mg5} event generation for each mass point of $Z'$. 
-The \href{https://github.com/cms-sw/genproductions/blob/mg240/bin/MadGraph5_aMCatNLO/cards/production/13TeV/monoHiggs/Zp2HDM/Zprime_A0h_A0chichi/Zprime_A0h_A0chichi_MZp600_MA0300/Zprime_A0h_A0chichi_MZp600_MA0300_run_card.dat}{run card} used in \texttt{MadGraph MG5\_aMC} and \href{https://github.com/cms-sw/genproductions/blob/mg240/bin/MadGraph5_aMCatNLO/cards/production/13TeV/monoHiggs/Zp2HDM/Zprime_A0h_A0chichi/Zprime_A0h_A0chichi_MZp600_MA0300/Zprime_A0h_A0chichi_MZp600_MA0300_proc_card.dat}{process card} were retrieved from the repository. 
+To generate a signal sample, model UFO file\href{http://rkhurana.web.cern.ch/rkhurana/monoH/models/}{(link)} is provided by CMS. From the CMS genproduction github repository\href{https://github.com/cms-sw/genproductions/tree/master/bin/MadGraph5_aMCatNLO/cards/production/13TeV/monoHiggs/Zp2HDM/Zprime_A0h_A0chichi}{(link)}\cite{ref:gitgen} one can retrieve the cards used for \texttt{MadGraph MG5\_aMC}\cite{ref:mg5} event generation for each mass point of $Z'$. 
+The run card\href{https://github.com/cms-sw/genproductions/blob/mg240/bin/MadGraph5_aMCatNLO/cards/production/13TeV/monoHiggs/Zp2HDM/Zprime_A0h_A0chichi/Zprime_A0h_A0chichi_MZp600_MA0300/Zprime_A0h_A0chichi_MZp600_MA0300_run_card.dat}{(link)} used in \texttt{MadGraph MG5\_aMC} and process card\href{https://github.com/cms-sw/genproductions/blob/mg240/bin/MadGraph5_aMCatNLO/cards/production/13TeV/monoHiggs/Zp2HDM/Zprime_A0h_A0chichi/Zprime_A0h_A0chichi_MZp600_MA0300/Zprime_A0h_A0chichi_MZp600_MA0300_proc_card.dat}{(link)} were retrieved from the repository. 
 In \texttt{MadGraph MG5\_aMC} $Z'$ particle is produced via the proton-proton collision and forced to decay into a standard model Higgs boson and a pseudoscalar boson $A$. 
 Next, $A$ is made to decay into two dark matter particles. The decay of Higgs boson into $\gamma\gamma$ is handled in \texttt{Pythia 8}\cite{ref:pythia}. This paper is focused on the H$\rightarrow\gamma\gamma$ only.
 
-Also some \href{https://github.com/cms-sw/genproductions/blob/mg240/bin/MadGraph5_aMCatNLO/cards/production/13TeV/monoHiggs/Zp2HDM/Zprime_A0h_A0chichi/Zprime_A0h_A0chichi_MZp600_MA0300/Zprime_A0h_A0chichi_MZp600_MA0300_customizecards.dat}{custom settings} were applied according to the mass range of $Z'$ ($M_{Zp} = 600 \sim 2500$). 
-Mass of $A$ is fixed to $300$ GeV. The coupling to dark matter was chosen to be 1\cite{ref:dm}. 
+Also the mass of exotic particles and couplings\href{https://github.com/cms-sw/genproductions/blob/mg240/bin/MadGraph5_aMCatNLO/cards/production/13TeV/monoHiggs/Zp2HDM/Zprime_A0h_A0chichi/Zprime_A0h_A0chichi_MZp600_MA0300/Zprime_A0h_A0chichi_MZp600_MA0300_customizecards.dat}{(link)} were added. For example, mass of $Z'$($M_{Z'}$) is set to $600, 800, 1000, 1200, 1400, 1700, 2000$ and $2500$ GeV, while the mass of pseudo scalar $A$ and dark matter particle are fixed to 300 and 100 GeV respectively. Also, decay width of $Z'$ and $A$ is set to 11.22981 and 8.95228. $Z'$ coupling strength $g_Z$ is chosen to be 0.8, while coupling to dark matter is 1\cite{ref:dm}. 
 Higgs boson mass is set to $M_H = 125$ GeV in \texttt{Pythia 8} and only the H$\rightarrow\gamma\gamma$ decay is turned on.
 The default pythia tunes which commonly used in CMS to match Monte Carlo samples to the data are also applied. These run, process, and pythia cards can be found in CMS software github repository\cite{ref:gitgen}.
 \begin{itemize}
-    \item \href{https://github.com/cms-sw/cmssw/blob/CMSSW_7_1_9_patch/Configuration/Generator/python/Pythia8CUEP8M1Settings_cfi.py}{Pythia8CUEP8M1Settings},
-    \item \href{https://github.com/cms-sw/cmssw/blob/CMSSW_7_2_X/Configuration/Generator/python/Pythia8CommonSettings_cfi.py}{Pythia8CommonSettings}.
+    \item Pythia8CUEP8M1Settings \href{https://github.com/cms-sw/cmssw/blob/CMSSW_7_1_9_patch/Configuration/Generator/python/Pythia8CUEP8M1Settings_cfi.py}{(link)},
+    \item Pythia8CommonSettings \href{https://github.com/cms-sw/cmssw/blob/CMSSW_7_2_X/Configuration/Generator/python/Pythia8CommonSettings_cfi.py}{(link)}.
 %    \item \href{https://github.com/cms-sw/genproductions/blob/master/python/ThirteenTeV/monoHiggs/pythia8_hadronizer_nomatching_Haa_cff.py}{The genfragment file is used.}
 \end{itemize}
 
@@ -208,9 +213,9 @@ For detector simulation, we used \texttt{Delphes 3}\cite{ref:delphes} with lates
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Comparision with official results}
- CMS did not provide a detailed cutflow. Here we present the product of acceptance and efficiency for signal in the SR for each mass point only. The error is defined as 
+ CMS did not provide a detailed cutflow. Here we present the product of acceptance and efficiency for signal in the SR for each mass point only. The difference is defined as 
 \begin{align*}
-	(1-(A\cdot\epsilon)^{MA5}/(A\cdot\epsilon)^{CMS} \,(\%).
+	(1-(A\cdot\epsilon)^{MA5})/(A\cdot\epsilon)^{CMS} \,(\%).
 \end{align*}
 
 \vskip 10pt
@@ -221,7 +226,7 @@ For detector simulation, we used \texttt{Delphes 3}\cite{ref:delphes} with lates
 \hline
 \multicolumn{4}{c}{Acceptance $\times$ efficiency $(A \cdot \epsilon)$}\\
 \hline
-$m_{Z_p}$ (GeV)& CMS EXO-16-012& MA5& Error\\
+$m_{Z_p}$ (GeV)& CMS EXO-16-012& MA5& Difference\\
 \hline
 600& 0.317 $\pm$ 0.004& 0.355 $\pm$ 0.001& -11 \%\\%35512
 800& 0.399 $\pm$ 0.004& 0.451 $\pm$ 0.001& -13 \%\\%45140
@@ -232,29 +237,22 @@ $m_{Z_p}$ (GeV)& CMS EXO-16-012& MA5& Error\\
 2000& 0.351 $\pm$ 0.004& 0.355 $\pm$ 0.001& -1.1 \%\\%35451
 2500& 0.213 $\pm$ 0.004& 0.208 $\pm$ 0.001& 2.3 \%\\%20759
 \hline
-\vspace*{20pt}
 \end{tabular}
 \end{center}
 
-Since missing transverse energy is important, we plotted only $ p_T^{miss}$ and $m_{\gamma\gamma}$. For this step, we made plot without normalization. For both plots from paper, the product of signal cross section and branching fraction is set to 1 fb. But exact branching ratios are not provided, so we compared shapes only.
+Since missing transverse energy is important, we plotted $ p_T^{miss}$ as well as $m_{\gamma\gamma}$. For both plots from the paper, the product of signal cross section and branching fraction is set to 1 fb. But exact branching ratios are not provided, so we normalized reproduced plots (solid lines) with the scale of 0.00002.
 
 \begin{figure}[h!]
 \centering
-\begin{minipage}{.5\textwidth}
-  \centering
-  \includegraphics[scale=0.08]{img/CMS-EXO-16-012_Figure_007-a.png}
-\end{minipage}%
-\begin{minipage}{.5\textwidth}
-  \centering
-   \includegraphics[scale=0.45]{img/MZp_M.pdf}
-\end{minipage}
-\caption{Distribution of $m_{\gamma\gamma}$ (left)\cite{ref:paper} in events passing all selection criteria except the $m_{\gamma\gamma}$ and $p_T^{miss}$ requirement. For the left plot, the product of signal cross section and branching fraction is set to 1 fb.}
+	\includegraphics[scale=0.6]{img/overlayed_met.png}
+\caption{Distribution of $p_T^{miss}$ for events passing all selection criteria including $120 \textrm{ GeV} < m_{\gamma\gamma} < 130 \textrm{ GeV}$ except $p_T^{miss}$ requirement. Dotted lines are CMS official results\cite{ref:paper} and solid lines are recast results. The recast results are plotted for shape comparison purpose, with normalization scale of 0.00002.}
 \end{figure}
 
 \begin{figure}[h!]
 \centering
-	\includegraphics[scale=0.6]{img/overlayed.png}
-\caption{Distribution of $p_T^{miss}$ for events passing all selection criteria including $120 \textrm{GeV} < m_{\gamma\gamma} < 130 \textrm{GeV}$ except $p_T^{miss}$ requirement. Dotted lines are CMS official results\cite{ref:paper} and solid lines are recast results. Since normalization factors are not provided, recast results are plotted for shape comparison purpose only.}
+  \centering
+  \includegraphics[scale=0.7]{img/overlayed_mass.png}
+\caption{Distribution of $m_{\gamma\gamma}$ (left)\cite{ref:paper} in events passing all selection criteria except the $m_{\gamma\gamma}$ and $p_T^{miss}$ requirement. Dotted lines are CMS official results\cite{ref:paper} and solid lines are recast results. The recast results are plotted for shape comparison purpose, with normalization scale of 0.00002.}
 \end{figure}
 
 \clearpage

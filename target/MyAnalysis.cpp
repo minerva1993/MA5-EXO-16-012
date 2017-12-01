@@ -115,7 +115,7 @@ bool MyAnalysis::Execute(SampleFormat& sample, const EventFormat& event){
       if( i == j ) continue;
       const RecPhotonFormat * myphoton2 = &(event.rec()->photons()[j]);
       MALorentzVector photon2;
-      if(myphoton2->pt() < 20) return true;
+      if(myphoton2->pt() < 18) return true;
       photon2.SetPtEtaPhiE(myphoton2->pt(), myphoton2->eta(), myphoton2->phi(), myphoton2->e());
       if( (photon1 + photon2).M() > 95.0 ){
         v_signalPhotons.push_back(myphoton1);
